@@ -1,0 +1,21 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light px-lg-5">
+  <a class="navbar-brand" routerLink="/home">Cook Easy!</a>
+  <button class="navbar-toggler" type="button" (click)="menuClickHandler()">
+    &#9776;
+  </button>
+
+  <div [ngbCollapse]="isMenuCollapsed" class="collapse navbar-collapse">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a
+          class="nav-link"
+          routerLink="/home"
+          routerLinkActive="active"
+          (click)="collapseMenu()"
+          >Home</a
+        >
+      </li>
+    </ul>
+    <app-user-control class="navbar-nav"></app-user-control>
+  </div>
+</nav>
