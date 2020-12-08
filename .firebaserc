@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "cook-easy-softuni": {
+      "hosting": {
+        "cook-easy": [
+          "cook-easy-softuni"
+        ]
+      }
+    }
+  }
+}

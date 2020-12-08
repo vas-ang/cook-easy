@@ -2,14 +2,16 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from './header/header.component';
 import { RouterModule } from '@angular/router';
-import { NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { UserControlComponent } from './user-control/user-control.component';
+import { AuthService } from './services/auth.service';
 
-const exports = [HeaderComponent];
+const importsExports = [HeaderComponent];
 
 @NgModule({
-  declarations: [...exports, UserControlComponent],
-  imports: [CommonModule, RouterModule, NgbCollapseModule],
-  exports: exports,
+  declarations: [...importsExports, UserControlComponent],
+  imports: [CommonModule, NgbModule, RouterModule],
+  providers: [AuthService],
+  exports: importsExports,
 })
 export class CoreModule {}

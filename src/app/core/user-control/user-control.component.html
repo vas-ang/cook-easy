@@ -1,9 +1,11 @@
 <ng-template #loggedOut>
   <li class="nav-item">
-    <a class="nav-link" routerLink="/login">Login</a>
+    <a class="nav-link" routerLink="/login" routerLinkActive="active">Login</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" routerLink="/register">Register</a>
+    <a class="nav-link" routerLink="/register" routerLinkActive="active"
+      >Register</a
+    >
   </li>
 </ng-template>
 
@@ -12,6 +14,6 @@
     <a class="nav-link" routerLink="/user/id">Hello, {{ "Pesho" }}!</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" routerLink="/logout">Logout</a>
+    <a class="nav-link" href="javascript:;" (click)="logoutHandler()">Logout</a>
   </li>
 </ul>
