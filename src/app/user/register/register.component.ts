@@ -7,7 +7,7 @@ import {
 } from '@angular/forms';
 import { rePasswordMatchFactory } from 'src/app/shared/validators';
 import { Router } from '@angular/router';
-import { UserService } from '../services/user.service';
+import { AuthService } from 'src/app/core/services/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -22,6 +22,10 @@ export class RegisterComponent {
     return this.form.get('email');
   }
 
+  get usernameInput(): AbstractControl | null {
+    return this.form.get('username');
+  }
+
   get passwordInput(): AbstractControl | null {
     return this.form.get('password');
   }
@@ -32,7 +36,7 @@ export class RegisterComponent {
 
   constructor(
     private fb: FormBuilder,
-    private authService: UserService,
+    private authService: AuthService,
     private router: Router
   ) {
     const passwordControl = this.fb.control('', [
@@ -42,14 +46,11 @@ export class RegisterComponent {
 
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
+      username: ['', [Validators.required, Validators.minLength(6)]],
       password: passwordControl,
       rePassword: [
         '',
-        [
-          Validators.required,
-          Validators.minLength(6),
-          rePasswordMatchFactory(passwordControl),
-        ],
+        [Validators.required, rePasswordMatchFactory(passwordControl)],
       ],
     });
   }
@@ -57,16 +58,14 @@ export class RegisterComponent {
   submitHandler() {
     this.isLoading = true;
 
-    const { email, password } = this.form.value;
+    const { email, username, password } = this.form.value;
 
-    this.authService.register(email, password).subscribe({
+    this.authService.register(email, username, password).subscribe({
       next: () => {
-        this.isLoading = false;
         this.router.navigate(['/home']);
       },
       error: (err) => {
-        this.isLoading = false;
-        console.log(err);
+        console.error(err);
       },
     });
   }

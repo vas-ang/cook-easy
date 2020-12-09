@@ -4,11 +4,13 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { UserRoutingModule } from './user-routing.module';
 import { ReactiveFormsModule } from '@angular/forms';
-import { UserService } from './services/user.service';
+import { SharedModule } from '../shared/shared.module';
+import { AuthService } from '../core/services/auth.service';
+import { SettingsComponent } from './settings/settings.component';
 
 @NgModule({
-  declarations: [LoginComponent, RegisterComponent],
-  providers: [UserService],
-  imports: [CommonModule, ReactiveFormsModule, UserRoutingModule],
+  declarations: [LoginComponent, RegisterComponent, SettingsComponent],
+  providers: [AuthService],
+  imports: [CommonModule, ReactiveFormsModule, UserRoutingModule, SharedModule],
 })
 export class UserModule {}

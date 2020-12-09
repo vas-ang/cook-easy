@@ -5,13 +5,14 @@ import { RouterModule } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { UserControlComponent } from './user-control/user-control.component';
 import { AuthService } from './services/auth.service';
+import { FileUploadService } from '../shared/services/file-upload.service';
 
 const importsExports = [HeaderComponent];
 
 @NgModule({
   declarations: [...importsExports, UserControlComponent],
   imports: [CommonModule, NgbModule, RouterModule],
-  providers: [AuthService],
+  providers: [AuthService, FileUploadService],
   exports: importsExports,
 })
 export class CoreModule {}

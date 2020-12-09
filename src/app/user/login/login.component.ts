@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { UserService } from '../services/user.service';
+import { AuthService } from 'src/app/core/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -22,7 +22,7 @@ export class LoginComponent {
 
   constructor(
     private fb: FormBuilder,
-    private authService: UserService,
+    private authService: AuthService,
     private router: Router
   ) {
     this.form = this.fb.group({
@@ -37,12 +37,10 @@ export class LoginComponent {
 
     this.authService.login(email, password).subscribe({
       next: () => {
-        this.isLoading = false;
         this.router.navigate(['/home']);
       },
       error: (err) => {
-        this.isLoading = false;
-        console.log(err);
+        console.error(err);
       },
     });
   }

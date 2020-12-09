@@ -9,9 +9,21 @@
   </li>
 </ng-template>
 
-<ul class="navbar-nav" *ngIf="isLoggedIn; else loggedOut">
+<ul
+  class="d-flex align-items-start navbar-nav"
+  *ngIf="isLogged$ | async; else loggedOut"
+>
   <li class="nav-item">
-    <a class="nav-link" routerLink="/user/id">Hello, {{ "Pesho" }}!</a>
+    <div class="d-flex">
+      <img
+        class="profile-picture rounded-circle z-depth-2 align-self-center"
+        [src]="(currentUser$ | async)?.photoURL"
+        alt="Profile picture"
+      />
+      <a class="nav-link" routerLink="/settings">
+        Hello, {{ (currentUser$ | async)?.displayName }}!
+      </a>
+    </div>
   </li>
   <li class="nav-item">
     <a class="nav-link" href="javascript:;" (click)="logoutHandler()">Logout</a>

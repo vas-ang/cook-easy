@@ -25,6 +25,29 @@
     </p>
   </div>
   <div class="form-group">
+    <label for="username">Username</label>
+    <input
+      formControlName="username"
+      [class.is-invalid]="usernameInput?.touched && usernameInput?.invalid"
+      type="text"
+      class="form-control"
+      name="username"
+    />
+    <p
+      *ngIf="usernameInput?.touched && usernameInput?.errors?.required"
+      class="text-danger"
+    >
+      Username is required.
+    </p>
+    <p
+      *ngIf="usernameInput?.touched && usernameInput?.errors?.minlength"
+      class="text-danger"
+    >
+      Username must be at least
+      {{ usernameInput?.errors?.minlength.requiredLength }} characters.
+    </p>
+  </div>
+  <div class="form-group">
     <label for="password">Password</label>
     <input
       formControlName="password"
@@ -41,10 +64,11 @@
       Password is required.
     </p>
     <p
-      *ngIf="passwordInput?.touched && passwordInput?.errors?.minLength"
+      *ngIf="passwordInput?.touched && passwordInput?.errors?.minlength"
       class="text-danger"
     >
-      Password must be at least 6 characters long.
+      Password must be at least
+      {{ passwordInput?.errors?.minlength.requiredLength }} characters long.
     </p>
   </div>
   <div class="form-group">
@@ -60,21 +84,7 @@
       name="rePassword"
     />
     <p
-      *ngIf="rePasswordInput?.touched && rePasswordInput?.errors?.required"
-      class="text-danger"
-    >
-      Password is required.
-    </p>
-    <p
-      *ngIf="rePasswordInput?.touched && rePasswordInput?.errors?.minLength"
-      class="text-danger"
-    >
-      Password must be at least 6 characters long.
-    </p>
-    <p
-      *ngIf="
-        rePasswordInput?.touched && rePasswordInput?.errors?.rePasswordMatch
-      "
+      *ngIf="rePasswordInput?.touched && rePasswordInput?.invalid"
       class="text-danger"
     >
       Passwords do not match.

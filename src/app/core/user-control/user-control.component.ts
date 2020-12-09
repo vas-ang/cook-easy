@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/core/services/auth.service';
 
@@ -7,23 +7,20 @@ import { AuthService } from 'src/app/core/services/auth.service';
   templateUrl: './user-control.component.html',
   styleUrls: ['./user-control.component.css'],
 })
-export class UserControlComponent implements OnInit {
-  isLoggedIn = false;
+export class UserControlComponent {
+  public isLogged$ = this.auth.isLogged$;
+  public currentUser$ = this.auth.currentUser$;
 
   constructor(private auth: AuthService, private router: Router) {}
 
   logoutHandler() {
-    this.auth.logout$().subscribe({
+    this.auth.logout().subscribe({
       next: () => {
         this.router.navigate(['/home']);
-        console.log('called');
       },
-    });
-  }
-
-  ngOnInit(): void {
-    this.auth.user$.subscribe((user) => {
-      this.isLoggedIn = !!user;
+      error: (err) => {
+        console.error(err);
+      },
     });
   }
 }

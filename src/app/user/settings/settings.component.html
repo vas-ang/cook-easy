@@ -1,0 +1,177 @@
+<h2 class="mb-5">User Settings</h2>
+
+<div class="container">
+  <div class="d-flex align-items-center row mb-5">
+    <img
+      class="profile-picture rounded-circle z-depth-2"
+      [src]="isInPreview ? imagePreview : (currentUser$ | async)?.photoURL"
+      alt="Profile picture"
+    />
+    <div class="d-flex flex-column align-items-start ml-5">
+      <h3 class="mb-4">{{ (currentUser$ | async)?.displayName }}</h3>
+      <div class="d-flex">
+        <div class="file btn btn-primary">
+          Change image
+          <input
+            #imageInput
+            (change)="imagePreviewHandler($event)"
+            class="img-input"
+            type="file"
+            accept="image/*"
+            name="image"
+          />
+        </div>
+        <ng-template #imgUploadControl>
+          <button class="btn btn-success ml-1" (click)="imageUploadHandler()">
+            Upload image
+          </button>
+          <button class="btn btn-danger ml-1" (click)="cancelPreviewHandler()">
+            Cancel
+          </button>
+        </ng-template>
+        <ng-container
+          *ngIf="!isInPreview; else imgUploadControl"
+        ></ng-container>
+      </div>
+      <p class="mt-1">
+        <em>*Image must be either .png, .jpg or .jpeg format.</em>
+      </p>
+    </div>
+  </div>
+  <div>
+    <h3 class="mb-3">Change username</h3>
+    <form [formGroup]="usernameForm" (ngSubmit)="changeUsernameHandler()">
+      <div class="d-flex align-items-center form-group">
+        <input
+          [placeholder]="(currentUser$ | async)?.displayName"
+          [class.is-invalid]="
+            usernameControl?.touched && !!usernameControl?.invalid
+          "
+          formControlName="username"
+          type="text"
+          class="form-control"
+          id="username"
+          name="username"
+        />
+        <div *ngIf="usernameForm.touched">
+          <button type="submit" class="btn btn-success ml-5">Submit</button>
+          <button
+            type="reset"
+            class="btn btn-danger ml-2"
+            (click)="cancel(usernameForm)"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+      <p
+        *ngIf="usernameControl?.touched && usernameControl?.errors?.required"
+        class="text-danger"
+      >
+        Username is required.
+      </p>
+      <p
+        *ngIf="usernameControl?.touched && usernameControl?.errors?.minlength"
+        class="text-danger"
+      >
+        Username must be at least
+        {{ usernameControl?.errors?.minlength.requiredLength }} characters.
+      </p>
+    </form>
+  </div>
+  <div>
+    <h3 class="mb-3">Change email</h3>
+    <form [formGroup]="emailForm" (ngSubmit)="changeEmailHandler()">
+      <div class="d-flex align-items-center form-group">
+        <input
+          [class.is-invalid]="emailControl?.touched && !!emailControl?.invalid"
+          [placeholder]="(currentUser$ | async)?.email"
+          formControlName="email"
+          type="text"
+          class="form-control"
+          id="email"
+          name="email"
+        />
+        <div *ngIf="emailForm.touched">
+          <button class="btn btn-success ml-5">Submit</button>
+          <button class="btn btn-danger ml-2" (click)="cancel(emailForm)">
+            Cancel
+          </button>
+        </div>
+      </div>
+      <div>
+        <p
+          *ngIf="emailControl?.touched && emailControl?.errors?.required"
+          class="text-danger"
+        >
+          Email is required.
+        </p>
+        <p
+          *ngIf="emailControl?.touched && emailControl?.errors?.email"
+          class="text-danger"
+        >
+          Email is invalid.
+        </p>
+      </div>
+    </form>
+  </div>
+  <div>
+    <h3 class="mb-3">Change password</h3>
+    <form [formGroup]="passwordForm" (ngSubmit)="changePasswordHandler()">
+      <div class="d-flex align-items-center form-group">
+        <div class="d-flex flex-column password-inputs">
+          <input
+            [class.is-invalid]="
+              passwordControl?.touched && !!passwordControl?.invalid
+            "
+            formControlName="password"
+            type="password"
+            class="form-control mb-3"
+            id="password"
+            name="password"
+            placeholder="Password..."
+          />
+          <input
+            [class.is-invalid]="
+              rePasswordControl?.touched && !!rePasswordControl?.invalid
+            "
+            formControlName="rePassword"
+            type="password"
+            class="form-control"
+            id="rePassword"
+            name="rePassword"
+            placeholder="Repeat password..."
+          />
+        </div>
+        <div *ngIf="passwordForm.touched">
+          <button class="btn btn-success ml-5">Submit</button>
+          <button class="btn btn-danger ml-2" (click)="cancel(passwordForm)">
+            Cancel
+          </button>
+        </div>
+      </div>
+      <div>
+        <p
+          *ngIf="passwordControl?.touched && passwordControl?.errors?.required"
+          class="text-danger"
+        >
+          Password is required.
+        </p>
+        <p
+          *ngIf="passwordControl?.touched && passwordControl?.errors?.minlength"
+          class="text-danger"
+        >
+          Password must be at least
+          {{ passwordControl?.errors?.minlength.requiredLength }} characters
+          long.
+        </p>
+        <p
+          *ngIf="rePasswordControl?.touched && rePasswordControl?.invalid"
+          class="text-danger"
+        >
+          Passwords do not match.
+        </p>
+      </div>
+    </form>
+  </div>
+</div>
