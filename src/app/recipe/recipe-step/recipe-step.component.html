@@ -1,0 +1,15 @@
+<p class="card">
+  <a
+    class="btn btn-secondary card-body"
+    (click)="collapse.toggle()"
+    [attr.aria-expanded]="!isCollapsed"
+    aria-controls="collapseExample"
+  >
+    {{ this.title }}
+  </a>
+</p>
+<div class="mb-4" #collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed">
+  <div class="card">
+    <div class="card-body">{{ this.content }}</div>
+  </div>
+</div>

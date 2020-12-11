@@ -3,7 +3,7 @@ import {
   AngularFirestore,
   AngularFirestoreCollection,
 } from '@angular/fire/firestore';
-import { from, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { finalize, tap } from 'rxjs/operators';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { Guid } from 'src/app/shared/helpers';
@@ -70,5 +70,9 @@ export class RecipeService {
         }
       })
     );
+  }
+
+  getRecipe(recipeId: string) {
+    return this._recipeCollection.doc(recipeId).valueChanges();
   }
 }

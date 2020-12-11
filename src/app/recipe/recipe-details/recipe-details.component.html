@@ -1,0 +1,51 @@
+<ng-template #loading>
+  <p>Loading...</p>
+</ng-template>
+
+<div
+  class="container"
+  *ngIf="recipeInfo$ | async; let recipeInfo; else: loading"
+>
+  <h2 class="row ml-1">{{ recipeInfo.recipe?.name }}</h2>
+  <div class="row ml-1 d-flex align-items-end mb-3">
+    <p class="mr-3 mb-0">Submitted by:</p>
+    <img
+      class="profile-pic mr-2"
+      [src]="recipeInfo.user?.photoURL"
+      alt="Creator profile picture"
+    />
+    <p class="mb-0">
+      {{ recipeInfo.user?.displayName }}
+    </p>
+  </div>
+  <img
+    class="row container-fluid"
+    [src]="recipeInfo.recipe?.imageUrl"
+    alt="image"
+  />
+  <h3 class="ml-2 mt-5 row">Description</h3>
+  <p class="ml-2 row">{{ recipeInfo.recipe?.shortDesc }}</p>
+  <h3 class="ml-2 mt-2 row">Products</h3>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Quantity</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let product of recipeInfo.recipe?.products">
+        <td>{{ product.name }}</td>
+        <td>{{ product.quantity }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3>Steps</h3>
+  <div class="steps-container">
+    <app-recipe-step
+      *ngFor="let step of recipeInfo.recipe?.steps"
+      [title]="step.title"
+      [content]="step.description"
+    ></app-recipe-step>
+  </div>
+</div>
