@@ -63,9 +63,9 @@ export class SettingsComponent {
   changeUsernameHandler() {
     const { username } = this.usernameForm.value;
 
-    this.auth.changeUsername(username).subscribe({
-      next: () => {
-        this.cancel(this.usernameForm);
+    this.auth.changeUsername$(username).subscribe({
+      complete: () => {
+        this.resetFormGroup(this.usernameForm);
       },
     });
   }
@@ -73,9 +73,9 @@ export class SettingsComponent {
   changeEmailHandler() {
     const { email } = this.emailForm.value;
 
-    this.auth.changeEmail(email).subscribe({
+    this.auth.changeEmail$(email).subscribe({
       next: () => {
-        this.cancel(this.emailForm);
+        this.resetFormGroup(this.emailForm);
       },
     });
   }
@@ -83,14 +83,14 @@ export class SettingsComponent {
   changePasswordHandler() {
     const { password } = this.passwordForm.value;
 
-    this.auth.changePassword(password).subscribe({
+    this.auth.changePassword$(password).subscribe({
       next: () => {
-        this.cancel(this.passwordForm);
+        this.resetFormGroup(this.passwordForm);
       },
     });
   }
 
-  cancel(fg: FormGroup) {
+  resetFormGroup(fg: FormGroup) {
     fg.reset();
   }
 
@@ -124,7 +124,7 @@ export class SettingsComponent {
       return;
     }
 
-    this.auth.changeProfilePicture(this._image)?.subscribe({
+    this.auth.changeProfilePicture$(this._image)?.subscribe({
       next: () => {
         this._image = null;
       },

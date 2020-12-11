@@ -15,10 +15,15 @@ export class UserDetailsService {
     );
   }
 
+  setUserCredentials(userId: string, userInfo: IUserInfo) {
+    this._usersCollection.doc(userId).set(userInfo);
+  }
+
   getUserDetails$(userId: string | undefined) {
     if (userId === undefined) {
       throw new Error('userId is undefined!');
     }
+
     return this._usersCollection.doc(userId).valueChanges();
   }
 }

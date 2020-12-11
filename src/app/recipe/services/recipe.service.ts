@@ -3,10 +3,9 @@ import {
   AngularFirestore,
   AngularFirestoreCollection,
 } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
-import { finalize, tap } from 'rxjs/operators';
+import { from, Observable } from 'rxjs';
+import { map, switchMap, tap } from 'rxjs/operators';
 import { AuthService } from 'src/app/core/services/auth.service';
-import { Guid } from 'src/app/shared/helpers';
 import { IProduct } from 'src/app/shared/interfaces/IProduct';
 import { IRecipe } from 'src/app/shared/interfaces/IRecipe';
 import { IStep } from 'src/app/shared/interfaces/IStep';
@@ -29,7 +28,7 @@ export class RecipeService {
     });
   }
 
-  addRecipe(
+  addRecipe$(
     name: string,
     image: File,
     shortDesc: string,
@@ -37,42 +36,34 @@ export class RecipeService {
     products: IProduct[],
     steps: IStep[]
   ) {
-    return this.authService.currentUser$.pipe(
-      tap((user) => {
-        if (user !== null) {
-          const filePath = `${Guid.newGuid()}${image.name}`;
+    const user = this.authService.currentUserSnapshot;
+    if (user === null) {
+      throw new Error('User is not logged.');
+    }
 
-          this.fileUploadService
-            .uploadImage(filePath, image)
-            .snapshotChanges()
-            .pipe(
-              finalize(() => {
-                this.fileUploadService
-                  .getFileRef(filePath)
-                  .getDownloadURL()
-                  .pipe(
-                    tap((url) => {
-                      this._recipeCollection.doc().set({
-                        creatorId: user.uid,
-                        name,
-                        imageUrl: url,
-                        shortDesc,
-                        difficulty,
-                        products,
-                        steps,
-                      } as IRecipe);
-                    })
-                  )
-                  .subscribe();
-              })
-            )
-            .subscribe();
-        }
+    const path = `pictures/${image.name}`;
+    return from(this.fileUploadService.uploadImage(path, image)).pipe(
+      switchMap((imageUrl) => {
+        const recipe: IRecipe = {
+          creatorId: user.uid,
+          name,
+          imageUrl,
+          shortDesc,
+          difficulty,
+          products,
+          steps,
+        };
+
+        return from(this._recipeCollection.add(recipe)).pipe(
+          switchMap((reference) => {
+            return reference.id;
+          })
+        );
       })
     );
   }
 
-  getRecipe(recipeId: string) {
+  getRecipe$(recipeId: string) {
     return this._recipeCollection.doc(recipeId).valueChanges();
   }
 }

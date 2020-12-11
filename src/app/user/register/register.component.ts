@@ -60,7 +60,7 @@ export class RegisterComponent {
 
     const { email, username, password } = this.form.value;
 
-    this.authService.register(email, username, password).subscribe({
+    this.authService.register$(email, username, password).subscribe({
       next: () => {
         this.router.navigate(['/home']);
       },

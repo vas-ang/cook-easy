@@ -5,11 +5,11 @@ import { AngularFireStorage } from '@angular/fire/storage';
 export class FileUploadService {
   constructor(private storage: AngularFireStorage) {}
 
-  uploadImage(path: string, data: any) {
-    return this.storage.upload(path, data);
-  }
-
-  getFileRef(path: string) {
-    return this.storage.ref(path);
+  async uploadImage(path: string, data: any) {
+    await this.storage.upload(path, data);
+    return (await this.storage
+      .ref(path)
+      .getDownloadURL()
+      .toPromise()) as string;
   }
 }

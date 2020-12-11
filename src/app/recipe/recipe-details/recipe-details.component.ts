@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { EMPTY, merge, Observable } from 'rxjs';
+import { EMPTY, Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { IRecipe } from 'src/app/shared/interfaces/IRecipe';
 import { IUserInfo } from 'src/app/shared/interfaces/IUserInfo';
@@ -26,7 +26,7 @@ export class RecipeDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.recipeInfo$ = this.recipeService
-      .getRecipe(this.route.snapshot.params['id'])
+      .getRecipe$(this.route.snapshot.params['id'])
       .pipe(
         switchMap((recipe) => {
           return this.userDetailsService

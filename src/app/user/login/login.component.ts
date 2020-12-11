@@ -35,7 +35,7 @@ export class LoginComponent {
     this.isLoading = true;
     const { email, password } = this.form.value;
 
-    this.authService.login(email, password).subscribe({
+    this.authService.login$(email, password).subscribe({
       next: () => {
         this.router.navigate(['/home']);
       },

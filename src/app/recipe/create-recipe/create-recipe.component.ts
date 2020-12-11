@@ -63,7 +63,7 @@ export class CreateRecipeComponent {
         [
           Validators.required,
           Validators.minLength(10),
-          Validators.maxLength(50),
+          Validators.maxLength(100),
         ],
       ],
       difficulty: ['', [Validators.required]],
@@ -81,7 +81,7 @@ export class CreateRecipeComponent {
     const { name, shortDesc, difficulty, products, steps } = this.form.value;
 
     this.recipeService
-      .addRecipe(name, this._imageFile, shortDesc, difficulty, products, steps)
+      .addRecipe$(name, this._imageFile, shortDesc, difficulty, products, steps)
       .subscribe({
         next: () => {
           this.router.navigate(['/home']);
@@ -156,7 +156,7 @@ export class CreateRecipeComponent {
         [
           Validators.required,
           Validators.minLength(20),
-          Validators.maxLength(100),
+          Validators.maxLength(500),
         ],
       ],
     });

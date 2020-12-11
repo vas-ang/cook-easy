@@ -14,7 +14,7 @@ export class UserControlComponent {
   constructor(private auth: AuthService, private router: Router) {}
 
   logoutHandler() {
-    this.auth.logout().subscribe({
+    this.auth.logout$().subscribe({
       next: () => {
         this.router.navigate(['/home']);
       },

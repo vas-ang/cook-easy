@@ -58,7 +58,7 @@
           <button
             type="reset"
             class="btn btn-danger ml-2"
-            (click)="cancel(usernameForm)"
+            (click)="resetFormGroup(usernameForm)"
           >
             Cancel
           </button>
@@ -94,7 +94,7 @@
         />
         <div *ngIf="emailForm.touched">
           <button class="btn btn-success ml-5">Submit</button>
-          <button class="btn btn-danger ml-2" (click)="cancel(emailForm)">
+          <button class="btn btn-danger ml-2" (click)="resetFormGroup(emailForm)">
             Cancel
           </button>
         </div>
@@ -145,7 +145,7 @@
         </div>
         <div *ngIf="passwordForm.touched">
           <button class="btn btn-success ml-5">Submit</button>
-          <button class="btn btn-danger ml-2" (click)="cancel(passwordForm)">
+          <button class="btn btn-danger ml-2" (click)="resetFormGroup(passwordForm)">
             Cancel
           </button>
         </div>

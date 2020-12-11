@@ -1,110 +1,87 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { FileUploadService } from 'src/app/shared/services/file-upload.service';
-import { finalize, map, tap } from 'rxjs/operators';
-import { from } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
+import { from, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { AngularFirestore } from '@angular/fire/firestore';
 import { IUserInfo } from 'src/app/shared/interfaces/IUserInfo';
+import { UserDetailsService } from 'src/app/shared/services/user-details.service';
+import { Guid } from 'src/app/shared/helpers';
 
 @Injectable()
 export class AuthService {
-  public currentUser$ = this.auth.user;
-  public isLogged$ = this.currentUser$.pipe(map((user) => user !== null));
+  currentUserSnapshot: firebase.default.User | null = null;
+
+  currentUser$ = this.auth.user;
+  isLogged$ = this.currentUser$.pipe(map((user) => user !== null));
 
   constructor(
     private auth: AngularFireAuth,
-    private angularFirestore: AngularFirestore,
+    private userDetailsService: UserDetailsService,
     private fileUploadService: FileUploadService
-  ) {}
+  ) {
+    this.auth.onAuthStateChanged((user) => {
+      this.currentUserSnapshot = user;
+    });
+  }
 
-  changeEmail(newEmail: string) {
-    return this.auth.user.pipe(
-      tap((user) => {
-        if (user !== null) {
-          user.updateEmail(newEmail);
-        }
+  changeEmail$(newEmail: string) {
+    this._nullUserValidator();
+
+    return from(this.currentUserSnapshot!.updateEmail(newEmail));
+  }
+
+  changeUsername$(newUsername: string) {
+    return new Observable<void>(() => {
+      this._nullUserValidator();
+      this.currentUserSnapshot!.updateProfile({ displayName: newUsername });
+      const userInfo: IUserInfo = {
+        displayName: newUsername,
+        photoURL: this.currentUserSnapshot!.photoURL,
+      };
+
+      this.userDetailsService.setUserCredentials(
+        this.currentUserSnapshot!.uid,
+        userInfo
+      );
+      return;
+    });
+  }
+
+  changePassword$(newPassword: string) {
+    this._nullUserValidator();
+    return from(this.currentUserSnapshot!.updatePassword(newPassword));
+  }
+
+  changeProfilePicture$(data: File) {
+    this._nullUserValidator();
+    return from(
+      this.fileUploadService.uploadImage(
+        `profilePictures/${Guid.newGuid() + data.name}`,
+        data
+      )
+    ).pipe(
+      tap((photoURL) => {
+        const displayName = this.currentUserSnapshot!.displayName;
+        this.userDetailsService.setUserCredentials(
+          this.currentUserSnapshot!.uid,
+          {
+            photoURL,
+            displayName,
+          }
+        );
+        this.currentUserSnapshot!.updateProfile({
+          photoURL,
+        });
       })
     );
   }
 
-  changeUsername(newUsername: string) {
-    return this.auth.user.pipe(
-      tap((user) => {
-        if (user !== null) {
-          user.updateProfile({
-            displayName: newUsername,
-          });
-          const userInfo: IUserInfo = {
-            displayName: newUsername,
-            photoURL: user.photoURL,
-          };
-
-          this.angularFirestore
-            .collection<IUserInfo>('users')
-            .doc(user.uid)
-            .set(userInfo);
-        }
-      })
-    );
-  }
-
-  changePassword(newPassword: string) {
-    return this.auth.user.pipe(
-      tap((user) => {
-        if (user !== null) {
-          user.updatePassword(newPassword);
-        }
-      })
-    );
-  }
-
-  changeProfilePicture(data: File) {
-    return this.auth.user.pipe(
-      tap((user) => {
-        if (user !== null) {
-          const filePath = `/profilePictures/${user.uid}/${data.name}`;
-
-          this.fileUploadService
-            .uploadImage(filePath, data)
-            .snapshotChanges()
-            .pipe(
-              finalize(() => {
-                this.fileUploadService
-                  .getFileRef(filePath)
-                  .getDownloadURL()
-                  .subscribe({
-                    next: (path) => {
-                      if (user !== null) {
-                        user.updateProfile({
-                          photoURL: path,
-                        });
-
-                        const userInfo: IUserInfo = {
-                          displayName: user.displayName,
-                          photoURL: path,
-                        };
-
-                        this.angularFirestore
-                          .collection<IUserInfo>('users')
-                          .doc(user.uid)
-                          .set(userInfo);
-                      }
-                    },
-                  });
-              })
-            )
-            .subscribe();
-        }
-      })
-    );
-  }
-
-  login(email: string, password: string) {
+  login$(email: string, password: string) {
     return from(this.auth.signInWithEmailAndPassword(email, password));
   }
 
-  register(email: string, username: string, password: string) {
+  register$(email: string, username: string, password: string) {
     return from(this.auth.createUserWithEmailAndPassword(email, password)).pipe(
       tap((credential) => {
         const user = credential.user;
@@ -119,16 +96,19 @@ export class AuthService {
             photoURL: environment.defaultProfilePictureUrl,
           };
 
-          this.angularFirestore
-            .collection<IUserInfo>('users')
-            .doc(user.uid)
-            .set(userInfo);
+          this.userDetailsService.setUserCredentials(user.uid, userInfo);
         }
       })
     );
   }
 
-  logout() {
+  logout$() {
     return from(this.auth.signOut());
+  }
+
+  private _nullUserValidator() {
+    if (this.currentUserSnapshot === null) {
+      throw new Error('User is null.');
+    }
   }
 }
