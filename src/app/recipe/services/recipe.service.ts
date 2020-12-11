@@ -24,7 +24,9 @@ export class RecipeService {
     private fileUploadService: FileUploadService
   ) {
     this._recipeCollection = this.firestore.collection<IRecipe>('recipes');
-    this.recipes$ = this._recipeCollection.valueChanges();
+    this.recipes$ = this._recipeCollection.valueChanges({
+      idField: 'recipeId',
+    });
   }
 
   addRecipe(

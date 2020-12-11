@@ -2,6 +2,7 @@ import { IProduct } from './IProduct';
 import { IStep } from './IStep';
 
 export interface IRecipe {
+  recipeId?: string;
   creatorId: string;
   name: string;
   imageUrl: string;

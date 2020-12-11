@@ -6,9 +6,10 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { RecipeService } from './services/recipe.service';
 import { FileUploadService } from '../shared/services/file-upload.service';
+import { RecipeListComponent } from './recipe-list/recipe-list.component';
 
 @NgModule({
-  declarations: [CreateRecipeComponent],
+  declarations: [CreateRecipeComponent, RecipeListComponent],
   providers: [RecipeService, FileUploadService],
   imports: [CommonModule, ReactiveFormsModule, RecipeRoutingModule, NgbModule],
 })

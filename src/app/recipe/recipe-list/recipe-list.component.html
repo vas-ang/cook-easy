@@ -1,0 +1,21 @@
+<div class="row">
+  <div
+    *ngFor="let recipe of recipes$ | async"
+    class="card-link"
+    class="card"
+    style="width: 18rem"
+  >
+    <img class="card-img-top" [src]="recipe.imageUrl" alt="Card image cap" />
+    <div class="card-body">
+      <h5 class="card-title">{{ recipe.name }}</h5>
+      <p class="card-text">
+        {{ recipe.shortDesc }}
+      </p>
+      <a
+        [routerLink]="['/recipe', recipe.recipeId]"
+        class="btn btn-primary stretched-link"
+        >Details</a
+      >
+    </div>
+  </div>
+</div>
