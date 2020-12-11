@@ -15,6 +15,15 @@
           >Home</a
         >
       </li>
+      <li class="nav-item">
+        <a
+          class="nav-link"
+          routerLink="/recipe/create"
+          routerLinkActive="active"
+          (click)="collapseMenu()"
+          >Create a recipe!</a
+        >
+      </li>
     </ul>
     <app-user-control class="navbar-nav"></app-user-control>
   </div>

@@ -1,0 +1,21 @@
+textarea {
+  resize: none;
+}
+
+.form-group {
+  width: 50%;
+}
+
+.img-preview-container {
+  overflow: hidden;
+  width: 300px;
+}
+
+.img-preview {
+  max-width: 100%;
+  height: auto;
+}
+
+label.m-none {
+  margin: 0;
+}

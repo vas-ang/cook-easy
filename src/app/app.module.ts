@@ -12,7 +12,7 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { environment } from 'src/environments/environment';
 import { SharedModule } from './shared/shared.module';
 import { UserModule } from './user/user.module';
-import { UserControlComponent } from './core/user-control/user-control.component';
+import { RecipeModule } from './recipe/recipe.module';
 
 @NgModule({
   declarations: [AppComponent, HomeComponent],
@@ -25,8 +25,9 @@ import { UserControlComponent } from './core/user-control/user-control.component
     CoreModule,
     SharedModule,
     UserModule,
+    RecipeModule,
   ],
   providers: [],
-  bootstrap: [AppComponent, HeaderComponent, UserControlComponent],
+  bootstrap: [AppComponent, HeaderComponent],
 })
 export class AppModule {}

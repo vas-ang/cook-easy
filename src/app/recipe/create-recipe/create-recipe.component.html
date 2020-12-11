@@ -1,0 +1,321 @@
+<h2 class="text-center mb-5">Create a recipe!</h2>
+
+<form
+  [formGroup]="form"
+  (ngSubmit)="submitHandler()"
+  class="d-flex flex-column align-items-center"
+>
+  <div class="form-group">
+    <label for="name">Name</label>
+    <input
+      formControlName="name"
+      [class.is-invalid]="nameControl?.touched && nameControl?.invalid"
+      class="form-control"
+      type="text"
+      name="name"
+      id="name"
+    />
+    <p
+      class="text-danger"
+      *ngIf="nameControl?.touched && nameControl?.errors?.required"
+    >
+      Name is required.
+    </p>
+    <p
+      class="text-danger"
+      *ngIf="nameControl?.touched && nameControl?.errors?.minlength"
+    >
+      Name must be at least
+      {{ nameControl?.errors?.minlength.requiredLength }} characters long.
+    </p>
+    <p
+      class="text-danger"
+      *ngIf="nameControl?.touched && nameControl?.errors?.maxlength"
+    >
+      Name must be maximum
+      {{ nameControl?.errors?.maxlength.requiredLength }} characters long.
+    </p>
+  </div>
+  <div class="form-group">
+    <label for="image">Image</label>
+    <div class="custom-file">
+      <input
+        formControlName="image"
+        type="file"
+        accept="image/*"
+        class="custom-file-input"
+        [class.is-invalid]="imageControl?.touched && imageControl?.invalid"
+        id="image"
+        name="image"
+        (change)="previewHandler($event)"
+      />
+      <label class="custom-file-label" for="image">{{ imageName }}</label>
+    </div>
+    <p class="mt-1">
+      <em>*Image must be either .png, .jpg or .jpeg format.</em>
+    </p>
+    <p
+      *ngIf="imageControl?.touched && imageControl?.errors?.required"
+      class="text-danger"
+    >
+      Image is required.
+    </p>
+    <label [hidden]="imagePreview === null" for="image-preview-container"
+      >Image preview</label
+    >
+    <div class="img-preview-container">
+      <img
+        class="img-preview"
+        [hidden]="imagePreview === null"
+        [src]="imagePreview"
+        alt="Image Preview"
+      />
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="shortDesc">Short description</label>
+    <textarea
+      id="shortDesc"
+      name="shortDesc"
+      formControlName="shortDesc"
+      class="form-control"
+      [class.is-invalid]="
+        shortDescControl?.touched && shortDescControl?.invalid
+      "
+    ></textarea>
+    <p
+      *ngIf="shortDescControl?.touched && shortDescControl?.errors?.required"
+      class="text-danger"
+    >
+      Short description is required.
+    </p>
+    <p
+      class="text-danger"
+      *ngIf="shortDescControl?.touched && shortDescControl?.errors?.minlength"
+    >
+      Short description must be at least
+      {{ shortDescControl?.errors?.minlength.requiredLength }} characters long.
+    </p>
+    <p
+      class="text-danger"
+      *ngIf="shortDescControl?.touched && shortDescControl?.errors?.maxlength"
+    >
+      Short description must be maximum
+      {{ shortDescControl?.errors?.maxlength.requiredLength }} characters long.
+    </p>
+  </div>
+  <div class="form-group">
+    <label for="difficulty">Difficulty</label>
+    <select
+      formControlName="difficulty"
+      class="form-control"
+      [class.is-invalid]="
+        difficultyControl?.touched && difficultyControl?.invalid
+      "
+      name="difficulty"
+      id="difficulty"
+    >
+      <option value="easy">Easy</option>
+      <option value="medium">Medium</option>
+      <option value="hard">Hard</option>
+    </select>
+    <p
+      class="text-danger"
+      *ngIf="difficultyControl?.touched && difficultyControl?.errors?.minlength"
+    >
+      Difficulty must be at least
+      {{ difficultyControl?.errors?.minlength.requiredLength }} characters long.
+    </p>
+  </div>
+  <div class="form-group">
+    <p class="text-center font-weight-bold">Products</p>
+    <div formArrayName="products">
+      <div
+        *ngFor="let productControl of productsArray?.controls; let i = index"
+      >
+        <div [formGroupName]="i" class="d-flex align-items-center mt-2">
+          <label class="mr-2" for="quantity">Quantity</label>
+          <input
+            formControlName="quantity"
+            class="form-control"
+            [class.is-invalid]="
+              productControl.get('quantity')?.touched &&
+              productControl.get('quantity')?.invalid
+            "
+          />
+          <label class="mx-2" for="unit">Name</label>
+          <input
+            formControlName="name"
+            class="form-control"
+            [class.is-invalid]="
+              productControl.get('name')?.touched &&
+              productControl.get('name')?.invalid
+            "
+            type="text"
+          />
+          <button
+            *ngIf="productsArray !== null && productsArray!.length > 1"
+            class="btn btn-danger ml-5"
+            [class.is-invalid]="
+              productControl.get('name')?.touched &&
+              productControl.get('name')?.errors?.required
+            "
+            type="reset"
+            (click)="removeProduct(i)"
+          >
+            Remove
+          </button>
+        </div>
+        <p
+          *ngIf="
+            productControl.get('quantity')?.touched &&
+            productControl.get('quantity')?.errors?.required
+          "
+          class="text-danger"
+        >
+          Quantity is required
+        </p>
+        <p
+          *ngIf="
+            productControl.get('name')?.touched &&
+            productControl.get('name')?.errors?.required
+          "
+          class="text-danger"
+        >
+          Name is required
+        </p>
+      </div>
+      <div class="text-center mt-2">
+        <button type="button" class="btn btn-secondary" (click)="addProduct()">
+          Add product
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <p class="text-center font-weight-bold">Steps</p>
+    <div
+      formArrayName="steps"
+      id="steps"
+      *ngFor="let stepControl of stepsArray?.controls; let i = index"
+    >
+      <div [formGroupName]="i">
+        <p class="font-italic mt-2">Step {{ i + 1 }}</p>
+        <div>
+          <label for="title">Title</label>
+          <input
+            formControlName="title"
+            class="form-control"
+            [class.is-invalid]="
+              stepControl.get('title')?.touched &&
+              stepControl.get('title')?.invalid
+            "
+            type="text"
+            id="title"
+            name="title"
+          />
+          <p
+            *ngIf="
+              stepControl.get('title')?.touched &&
+              stepControl.get('title')?.errors?.required
+            "
+            class="text-danger"
+          >
+            Title is required
+          </p>
+          <p
+            *ngIf="
+              stepControl.get('title')?.touched &&
+              stepControl.get('title')?.errors?.minlength
+            "
+            class="text-danger"
+          >
+            Title must be at least
+            {{ stepControl.get("title")?.errors?.minlength.requiredLength }}
+            characters.
+          </p>
+          <p
+            *ngIf="
+              stepControl.get('title')?.touched &&
+              stepControl.get('title')?.errors?.maxlength
+            "
+            class="text-danger"
+          >
+            Title must be at max
+            {{ stepControl.get("title")?.errors?.maxlength.requiredLength }}
+            characters.
+          </p>
+          <label for="description">Description</label>
+          <textarea
+            formControlName="description"
+            class="form-control"
+            [class.is-invalid]="
+              stepControl.get('description')?.touched &&
+              stepControl.get('description')?.invalid
+            "
+            id="description"
+            name="description"
+          ></textarea>
+          <p
+            *ngIf="
+              stepControl.get('description')?.touched &&
+              stepControl.get('description')?.errors?.required
+            "
+            class="text-danger"
+          >
+            Description is required
+          </p>
+          <p
+            *ngIf="
+              stepControl.get('description')?.touched &&
+              stepControl.get('description')?.errors?.minlength
+            "
+            class="text-danger"
+          >
+            Description must be at least
+            {{
+              stepControl.get("description")?.errors?.minlength.requiredLength
+            }}
+            characters.
+          </p>
+          <p
+            *ngIf="
+              stepControl.get('description')?.touched &&
+              stepControl.get('description')?.errors?.maxlength
+            "
+            class="text-danger"
+          >
+            Description must be at max
+            {{
+              stepControl.get("description")?.errors?.maxlength.requiredLength
+            }}
+            characters.
+          </p>
+          <button
+            *ngIf="stepsArray !== null && stepsArray!.length > 1"
+            type="reset"
+            class="btn btn-danger mt-2"
+            (click)="removeStep(i)"
+          >
+            Remove step
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="text-center mt-2">
+      <button type="button" class="btn btn-secondary" (click)="addStep()">
+        Add step
+      </button>
+    </div>
+  </div>
+  <div class="form-group text-center">
+    <button
+      [disabled]="form.invalid"
+      type="submit"
+      class="btn btn-primary mx-3"
+    >
+      Create
+    </button>
+    <button type="reset" class="btn btn-danger mx-3">Cancel</button>
+  </div>
+</form>

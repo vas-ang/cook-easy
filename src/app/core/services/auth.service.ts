@@ -4,6 +4,8 @@ import { FileUploadService } from 'src/app/shared/services/file-upload.service';
 import { finalize, map, tap } from 'rxjs/operators';
 import { from } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { IUserInfo } from 'src/app/shared/interfaces/IUserInfo';
 
 @Injectable()
 export class AuthService {
@@ -12,6 +14,7 @@ export class AuthService {
 
   constructor(
     private auth: AngularFireAuth,
+    private angularFirestore: AngularFirestore,
     private fileUploadService: FileUploadService
   ) {}
 
@@ -27,10 +30,21 @@ export class AuthService {
 
   changeUsername(newUsername: string) {
     return this.auth.user.pipe(
-      tap((x) => {
-        x?.updateProfile({
-          displayName: newUsername,
-        });
+      tap((user) => {
+        if (user !== null) {
+          user.updateProfile({
+            displayName: newUsername,
+          });
+          const userInfo: IUserInfo = {
+            displayName: newUsername,
+            photoURL: user.photoURL,
+          };
+
+          this.angularFirestore
+            .collection<IUserInfo>('users')
+            .doc(user.uid)
+            .set(userInfo);
+        }
       })
     );
   }
@@ -65,6 +79,16 @@ export class AuthService {
                         user.updateProfile({
                           photoURL: path,
                         });
+
+                        const userInfo: IUserInfo = {
+                          displayName: user.displayName,
+                          photoURL: path,
+                        };
+
+                        this.angularFirestore
+                          .collection<IUserInfo>('users')
+                          .doc(user.uid)
+                          .set(userInfo);
                       }
                     },
                   });
@@ -83,10 +107,23 @@ export class AuthService {
   register(email: string, username: string, password: string) {
     return from(this.auth.createUserWithEmailAndPassword(email, password)).pipe(
       tap((credential) => {
-        credential.user?.updateProfile({
-          displayName: username,
-          photoURL: environment.defaultProfilePictureUrl,
-        });
+        const user = credential.user;
+        if (user !== null) {
+          user.updateProfile({
+            displayName: username,
+            photoURL: environment.defaultProfilePictureUrl,
+          });
+
+          const userInfo: IUserInfo = {
+            displayName: username,
+            photoURL: environment.defaultProfilePictureUrl,
+          };
+
+          this.angularFirestore
+            .collection<IUserInfo>('users')
+            .doc(user.uid)
+            .set(userInfo);
+        }
       })
     );
   }

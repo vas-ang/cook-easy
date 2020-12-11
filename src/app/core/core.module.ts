@@ -11,7 +11,7 @@ const importsExports = [HeaderComponent];
 
 @NgModule({
   declarations: [...importsExports, UserControlComponent],
-  imports: [CommonModule, NgbModule, RouterModule],
+  imports: [CommonModule, RouterModule, NgbModule],
   providers: [AuthService, FileUploadService],
   exports: importsExports,
 })
