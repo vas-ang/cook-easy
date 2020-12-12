@@ -10,6 +10,7 @@ import { RecipeListComponent } from './recipe-list/recipe-list.component';
 import { RecipeDetailsComponent } from './recipe-details/recipe-details.component';
 import { UserDetailsService } from '../shared/services/user-details.service';
 import { RecipeStepComponent } from './recipe-step/recipe-step.component';
+import { AuthGuard } from '../core/guards/auth.guard';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,7 @@ import { RecipeStepComponent } from './recipe-step/recipe-step.component';
     RecipeDetailsComponent,
     RecipeStepComponent,
   ],
-  providers: [RecipeService, FileUploadService, UserDetailsService],
+  providers: [RecipeService, FileUploadService, UserDetailsService, AuthGuard],
   imports: [CommonModule, ReactiveFormsModule, RecipeRoutingModule, NgbModule],
 })
 export class RecipeModule {}

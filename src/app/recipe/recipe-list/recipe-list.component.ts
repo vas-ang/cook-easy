@@ -86,6 +86,7 @@ export class RecipeListComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.recipeService.updateNameFilter(null);
     this.recipeService.updateDifficultyFilter(null);
+    this._resetPaginationState();
   }
 
   private _resetPaginationState() {

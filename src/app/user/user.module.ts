@@ -7,10 +7,11 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 import { AuthService } from '../core/services/auth.service';
 import { SettingsComponent } from './settings/settings.component';
+import { AuthGuard } from '../core/guards/auth.guard';
 
 @NgModule({
   declarations: [LoginComponent, RegisterComponent, SettingsComponent],
-  providers: [AuthService],
+  providers: [AuthService, AuthGuard],
   imports: [CommonModule, ReactiveFormsModule, UserRoutingModule, SharedModule],
 })
 export class UserModule {}
