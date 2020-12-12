@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { fromEvent, Observable, of } from 'rxjs';
-import { debounceTime, map, skip, switchMap, take } from 'rxjs/operators';
+import { debounceTime, map, switchMap } from 'rxjs/operators';
 import { IRecipe } from 'src/app/shared/interfaces/IRecipe';
 import { RecipeService } from '../services/recipe.service';
 
@@ -10,7 +10,8 @@ import { RecipeService } from '../services/recipe.service';
   templateUrl: './recipe-list.component.html',
   styleUrls: ['./recipe-list.component.css'],
 })
-export class RecipeListComponent implements OnInit {
+export class RecipeListComponent implements OnInit, OnDestroy {
+  showResetBtn = false;
   recipeQuery$: Observable<IRecipe[]> | null = null;
 
   get recipes$() {
@@ -19,8 +20,21 @@ export class RecipeListComponent implements OnInit {
 
   constructor(private recipeService: RecipeService, private router: Router) {}
 
-  redirectClickHandler(recipeId: string | undefined) {
-    this.router.navigate(['recipe', recipeId]);
+  viewAllClickHandler(queryInput: HTMLInputElement) {
+    queryInput.value = '';
+    this.showResetBtn = false;
+    this.recipeService.updateNameFilter(null);
+  }
+
+  getByNameClickHandler(name: string) {
+    this.showResetBtn = true;
+    this.recipeService.updateNameFilter(name);
+  }
+
+  changeDifficultyFilterHandler(event: Event) {
+    this.recipeService.updateDifficultyFilter(
+      (event.target as HTMLSelectElement).value
+    );
   }
 
   ngOnInit(): void {
@@ -31,21 +45,13 @@ export class RecipeListComponent implements OnInit {
         return (e.target as HTMLInputElement).value;
       }),
       switchMap((query) => {
-        if (query === null || query === '') {
-          return of([]);
-        }
-        return this.recipeService
-          .getRecipesQueriedCollection((ref) =>
-            ref
-              .orderBy('name')
-              .startAt(query)
-              .endAt(query + '\uf8ff')
-          )
-          .valueChanges({
-            idField: 'recipeId',
-          })
-          .pipe(map((arr) => arr.slice(0, 5)));
+        return this.recipeService.getQueryResults$(query);
       })
     );
+  }
+
+  ngOnDestroy(): void {
+    this.recipeService.updateNameFilter(null);
+    this.recipeService.updateDifficultyFilter(null);
   }
 }

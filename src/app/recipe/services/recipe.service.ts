@@ -2,10 +2,9 @@ import { Injectable } from '@angular/core';
 import {
   AngularFirestore,
   AngularFirestoreCollection,
-  QueryFn,
 } from '@angular/fire/firestore';
-import { from, Observable } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { BehaviorSubject, from, Observable, of } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { IProduct } from 'src/app/shared/interfaces/IProduct';
 import { IRecipe } from 'src/app/shared/interfaces/IRecipe';
@@ -14,6 +13,8 @@ import { FileUploadService } from 'src/app/shared/services/file-upload.service';
 
 @Injectable()
 export class RecipeService {
+  private _difficultyFilter = new BehaviorSubject<string | null>(null);
+  private _nameFilter = new BehaviorSubject<string | null>(null);
   private _recipeCollection: AngularFirestoreCollection<IRecipe>;
 
   recipes$: Observable<IRecipe[]>;
@@ -24,15 +25,56 @@ export class RecipeService {
     private fileUploadService: FileUploadService
   ) {
     this._recipeCollection = this.firestore.collection<IRecipe>('recipes');
-    this.recipes$ = this._recipeCollection.valueChanges({
-      idField: 'recipeId',
-    });
+    this.recipes$ = this._nameFilter.pipe(
+      switchMap((name) => {
+        return this._difficultyFilter.pipe(
+          switchMap((difficulty) => {
+            return this.firestore
+              .collection<IRecipe>('recipes', (ref) => {
+                let query:
+                  | firebase.default.firestore.CollectionReference
+                  | firebase.default.firestore.Query = ref;
+
+                if (name !== null && name !== '') {
+                  query = query.where('name', '==', name);
+                }
+                if (difficulty !== null && difficulty !== 'all') {
+                  query = query.where('difficulty', '==', difficulty);
+                }
+
+                return query;
+              })
+              .valueChanges();
+          })
+        );
+      })
+    );
   }
 
-  getRecipesQueriedCollection(
-    queryFn?: QueryFn<firebase.default.firestore.DocumentData>
-  ) {
-    return this.firestore.collection<IRecipe>('recipes', queryFn);
+  updateDifficultyFilter(diffType: string | null) {
+    this._difficultyFilter.next(diffType);
+  }
+
+  updateNameFilter(name: string | null) {
+    this._nameFilter.next(name);
+  }
+
+  getQueryResults$(query: string | null) {
+    if (query === null || query === '') {
+      return of([]);
+    }
+
+    return this.firestore
+      .collection<IRecipe>('recipes', (ref) =>
+        ref
+          .orderBy('name')
+          .startAt(query)
+          .endAt(query + '\uf8ff')
+      )
+      .valueChanges({
+        idField: 'recipeId',
+      })
+      .pipe(map((arr) => arr.slice(0, 5)));
   }
 
   addRecipe$(

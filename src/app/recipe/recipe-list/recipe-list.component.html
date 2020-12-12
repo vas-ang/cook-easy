@@ -1,9 +1,10 @@
 <div ngbDropdown class="row">
   <input
+    #queryInput
     id="queryInput"
     type="text"
     placeholder="Search for a recipe..."
-    class="form-control mb-5"
+    class="form-control mb-3"
     autocomplete="off"
     ngbDropdownToggle
   />
@@ -11,38 +12,62 @@
     *ngIf="recipeQuery$ | async; let recipes"
     class="container-fluid"
     ngbDropdownMenu
-    aria-labelledby="dropdownBasic"
   >
     <p class="text-center" *ngIf="recipes !== null && recipes.length === 0">
       No results were found
     </p>
     <button
       *ngFor="let recipe of recipes"
-      (click)="redirectClickHandler(recipe.recipeId)"
+      (click)="getByNameClickHandler(recipe.name)"
       ngbDropdownItem
     >
       {{ recipe.name }}
     </button>
   </div>
 </div>
-<div class="row">
-  <div
-    *ngFor="let recipe of recipes$ | async"
-    class="card-link"
-    class="card"
-    style="width: 18rem"
+<div class="row d-flex justify-content-center align-items-center mb-3">
+  <button
+    *ngIf="showResetBtn"
+    class="btn btn-primary mr-5"
+    (click)="viewAllClickHandler(queryInput)"
   >
-    <img class="card-img-top" [src]="recipe.imageUrl" alt="Card image cap" />
-    <div class="card-body">
-      <h5 class="card-title">{{ recipe.name }}</h5>
-      <p class="card-text">
-        {{ recipe.shortDesc }}
-      </p>
-      <a
-        [routerLink]="['/recipe', recipe.recipeId]"
-        class="btn btn-primary stretched-link"
-        >Details</a
+    Return to all recipes
+  </button>
+  <label for="difficulty" class="mr-3 mb-0">Difficulty</label>
+  <select
+    id="difficulty"
+    class="form-control"
+    (change)="changeDifficultyFilterHandler($event)"
+  >
+    <option value="all">All</option>
+    <option value="easy">Easy</option>
+    <option value="medium">Medium</option>
+    <option value="hard">Hard</option>
+  </select>
+</div>
+<div class="row">
+  <div class="container col-10">
+    <div class="row">
+      <div
+        *ngFor="let recipe of recipes$ | async"
+        class="card-link"
+        class="card mr-3 mb-3"
       >
+        <div class="card-img-container">
+          <img class="card-img" [src]="recipe.imageUrl" alt="Card image cap" />
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">{{ recipe.name }}</h5>
+          <p class="card-text">
+            {{ recipe.shortDesc }}
+          </p>
+          <a
+            [routerLink]="['/recipe', recipe.recipeId]"
+            class="btn btn-primary stretched-link"
+            >Details</a
+          >
+        </div>
+      </div>
     </div>
   </div>
 </div>
