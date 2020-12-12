@@ -1,0 +1,78 @@
+[debug] [2020-12-12T22:04:16.767Z] ----------------------------------------------------------------------
+[debug] [2020-12-12T22:04:16.768Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\v_ang\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js init
+[debug] [2020-12-12T22:04:16.768Z] CLI Version:   8.19.0
+[debug] [2020-12-12T22:04:16.769Z] Platform:      win32
+[debug] [2020-12-12T22:04:16.769Z] Node Version:  v12.13.1
+[debug] [2020-12-12T22:04:16.769Z] Time:          Sun Dec 13 2020 00:04:16 GMT+0200 (Eastern European Standard Time)
+[debug] [2020-12-12T22:04:16.770Z] ----------------------------------------------------------------------
+[debug] [2020-12-12T22:04:16.770Z] 
+[debug] [2020-12-12T22:04:16.771Z] >>> [apiv2][query] GET https://firebase-public.firebaseio.com/cli.json [none]
+[debug] [2020-12-12T22:04:16.787Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-12-12T22:04:16.788Z] > authorizing via signed-in user
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  D:\Programs\SoftUni\Angular\cook-easy
+
+Before we get started, keep in mind:
+
+  * You are initializing in an existing Firebase project directory
+
+[debug] [2020-12-12T22:04:17.251Z] <<< [apiv2][status] GET https://firebase-public.firebaseio.com/cli.json 200
+[debug] [2020-12-12T22:04:17.252Z] <<< [apiv2][body] GET https://firebase-public.firebaseio.com/cli.json {"cloudBuildErrorAfter":1594252800000,"cloudBuildWarnAfter":1590019200000,"defaultNode10After":1594252800000,"minVersion":"3.0.5","node8DeploysDisabledAfter":1613390400000,"node8RuntimeDisabledAfter":1615809600000,"node8WarnAfter":1600128000000}
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] but for now we'll just set up a default project.
+[info] 
+[debug] [2020-12-12T22:05:32.987Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2020-12-12T22:05:32.988Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2020-12-12T22:05:33.115Z] <<< HTTP RESPONSE 200 {"date":"Sat, 12 Dec 2020 22:05:33 GMT","cache-control":"no-cache, no-store, max-age=0, must-revalidate","pragma":"no-cache","expires":"Mon, 01 Jan 1990 00:00:00 GMT","content-type":"application/json; charset=utf-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","server":"scaffolding on HTTPServer2","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2020-12-12T22:05:33.122Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects?pageSize=100  
+ 
+[debug] [2020-12-12T22:05:33.505Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Sat, 12 Dec 2020 22:05:34 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[info] i  Using project cook-easy-softuni (cook-easy-softuni) 
+[info] 
+=== Firestore Setup
+[debug] [2020-12-12T22:05:38.219Z] >>> HTTP REQUEST GET https://serviceusage.googleapis.com/v1/projects/cook-easy-softuni/services/firestore.googleapis.com  
+ 
+[debug] [2020-12-12T22:05:39.289Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Sat, 12 Dec 2020 22:05:39 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2020-12-12T22:05:39.290Z] >>> HTTP REQUEST GET https://appengine.googleapis.com/v1/apps/cook-easy-softuni  
+ 
+[debug] [2020-12-12T22:05:39.681Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Sat, 12 Dec 2020 22:05:40 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2020-12-12T22:05:39.681Z] database_type: CLOUD_FIRESTORE
+[debug] [2020-12-12T22:05:39.681Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-12-12T22:05:39.682Z] > authorizing via signed-in user
+[debug] [2020-12-12T22:05:39.682Z] [iam] checking project cook-easy-softuni for permissions ["firebase.projects.get"]
+[debug] [2020-12-12T22:05:39.682Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/cook-easy-softuni:testIamPermissions  
+ {"permissions":["firebase.projects.get"]}
+[debug] [2020-12-12T22:05:40.560Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Sat, 12 Dec 2020 22:05:41 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","server-timing":"gfet4t7; dur=780","alt-svc":"h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[info] 
+[info] Firestore Security Rules allow you to define how and when to allow
+[info] requests. You can keep these rules in your project directory
+[info] and publish them with firebase deploy.
+[info] 
+[debug] [2020-12-12T22:05:48.783Z] >>> HTTP REQUEST GET https://firebaserules.googleapis.com/v1/projects/cook-easy-softuni/releases?pageSize=10&pageToken=  
+ 
+[debug] [2020-12-12T22:05:49.675Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Sat, 12 Dec 2020 22:05:50 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2020-12-12T22:05:49.675Z] Found ruleset: projects/cook-easy-softuni/rulesets/dd8626b5-6849-4f91-b530-8f91b188e2b6
+[debug] [2020-12-12T22:05:49.676Z] >>> HTTP REQUEST GET https://firebaserules.googleapis.com/v1/projects/cook-easy-softuni/rulesets/dd8626b5-6849-4f91-b530-8f91b188e2b6  
+ 
+[debug] [2020-12-12T22:05:50.384Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Sat, 12 Dec 2020 22:05:51 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2020-12-12T22:05:50.387Z] Error: EISDIR: illegal operation on a directory, open 'D:\Programs\SoftUni\Angular\cook-easy'
+    at Object.openSync (fs.js:440:3)
+    at Object.writeFileSync (fs.js:1265:35)
+    at Config.writeProjectFile (C:\Users\v_ang\AppData\Roaming\npm\node_modules\firebase-tools\lib\config.js:156:8)
+    at C:\Users\v_ang\AppData\Roaming\npm\node_modules\firebase-tools\lib\init\features\firestore\rules.js:50:27
+    at processTicksAndRejections (internal/process/task_queues.js:93:5)
+[error] 
+[error] Error: An unexpected error has occurred.
