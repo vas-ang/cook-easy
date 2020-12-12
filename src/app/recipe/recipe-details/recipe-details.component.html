@@ -6,7 +6,10 @@
   class="container"
   *ngIf="recipeInfo$ | async; let recipeInfo; else: loading"
 >
-  <h2 class="row ml-1">{{ recipeInfo.recipe?.name }}</h2>
+  <h2 class="row ml-1">
+    {{ recipeInfo.recipe?.name }}
+  </h2>
+  <h4 class="row ml-1">{{ recipeInfo.recipe?.difficulty }} difficulty</h4>
   <div class="row ml-1 d-flex align-items-end mb-3">
     <p class="mr-3 mb-0">Submitted by:</p>
     <img

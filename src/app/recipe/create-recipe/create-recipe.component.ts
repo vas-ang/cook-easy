@@ -54,7 +54,7 @@ export class CreateRecipeComponent {
         [
           Validators.required,
           Validators.minLength(3),
-          Validators.maxLength(20),
+          Validators.maxLength(30),
         ],
       ],
       image: ['', [Validators.required]],
@@ -62,8 +62,8 @@ export class CreateRecipeComponent {
         '',
         [
           Validators.required,
-          Validators.minLength(10),
-          Validators.maxLength(100),
+          Validators.minLength(20),
+          Validators.maxLength(200),
         ],
       ],
       difficulty: ['', [Validators.required]],
@@ -147,8 +147,8 @@ export class CreateRecipeComponent {
         '',
         [
           Validators.required,
-          Validators.minLength(5),
-          Validators.maxLength(20),
+          Validators.minLength(3),
+          Validators.maxLength(40),
         ],
       ],
       description: [

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { FileUploadService } from 'src/app/shared/services/file-upload.service';
 import { map, tap } from 'rxjs/operators';
-import { from, Observable } from 'rxjs';
+import { from } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { IUserInfo } from 'src/app/shared/interfaces/IUserInfo';
 import { UserDetailsService } from 'src/app/shared/services/user-details.service';
@@ -32,20 +32,7 @@ export class AuthService {
   }
 
   changeUsername$(newUsername: string) {
-    return new Observable<void>(() => {
-      this._nullUserValidator();
-      this.currentUserSnapshot!.updateProfile({ displayName: newUsername });
-      const userInfo: IUserInfo = {
-        displayName: newUsername,
-        photoURL: this.currentUserSnapshot!.photoURL,
-      };
-
-      this.userDetailsService.setUserCredentials(
-        this.currentUserSnapshot!.uid,
-        userInfo
-      );
-      return;
-    });
+    return from(this._changeUsername(newUsername));
   }
 
   changePassword$(newPassword: string) {
@@ -106,6 +93,21 @@ export class AuthService {
     return from(this.auth.signOut());
   }
 
+  private async _changeUsername(newUsername: string) {
+    this._nullUserValidator();
+
+    this.currentUserSnapshot!.updateProfile({ displayName: newUsername });
+
+    const userInfo: IUserInfo = {
+      displayName: newUsername,
+      photoURL: this.currentUserSnapshot!.photoURL,
+    };
+
+    this.userDetailsService.setUserCredentials(
+      this.currentUserSnapshot!.uid,
+      userInfo
+    );
+  }
   private _nullUserValidator() {
     if (this.currentUserSnapshot === null) {
       throw new Error('User is null.');

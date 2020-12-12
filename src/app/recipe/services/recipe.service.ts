@@ -2,9 +2,10 @@ import { Injectable } from '@angular/core';
 import {
   AngularFirestore,
   AngularFirestoreCollection,
+  QueryFn,
 } from '@angular/fire/firestore';
 import { from, Observable } from 'rxjs';
-import { map, switchMap, tap } from 'rxjs/operators';
+import { switchMap } from 'rxjs/operators';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { IProduct } from 'src/app/shared/interfaces/IProduct';
 import { IRecipe } from 'src/app/shared/interfaces/IRecipe';
@@ -26,6 +27,12 @@ export class RecipeService {
     this.recipes$ = this._recipeCollection.valueChanges({
       idField: 'recipeId',
     });
+  }
+
+  getRecipesQueriedCollection(
+    queryFn?: QueryFn<firebase.default.firestore.DocumentData>
+  ) {
+    return this.firestore.collection<IRecipe>('recipes', queryFn);
   }
 
   addRecipe$(

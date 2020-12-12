@@ -1,3 +1,30 @@
+<div ngbDropdown class="row">
+  <input
+    id="queryInput"
+    type="text"
+    placeholder="Search for a recipe..."
+    class="form-control mb-5"
+    autocomplete="off"
+    ngbDropdownToggle
+  />
+  <div
+    *ngIf="recipeQuery$ | async; let recipes"
+    class="container-fluid"
+    ngbDropdownMenu
+    aria-labelledby="dropdownBasic"
+  >
+    <p class="text-center" *ngIf="recipes !== null && recipes.length === 0">
+      No results were found
+    </p>
+    <button
+      *ngFor="let recipe of recipes"
+      (click)="redirectClickHandler(recipe.recipeId)"
+      ngbDropdownItem
+    >
+      {{ recipe.name }}
+    </button>
+  </div>
+</div>
 <div class="row">
   <div
     *ngFor="let recipe of recipes$ | async"
