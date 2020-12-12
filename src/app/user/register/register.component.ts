@@ -17,6 +17,7 @@ import { AuthService } from 'src/app/core/services/auth.service';
 export class RegisterComponent {
   form: FormGroup;
   isLoading: boolean = false;
+  errorMessage: string | null = null;
 
   get emailInput(): AbstractControl | null {
     return this.form.get('email');
@@ -65,7 +66,8 @@ export class RegisterComponent {
         this.router.navigate(['/home']);
       },
       error: (err) => {
-        console.error(err);
+        this.isLoading = false;
+        this.errorMessage = err.message;
       },
     });
   }

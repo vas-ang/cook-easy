@@ -11,12 +11,13 @@ import { rePasswordMatchFactory } from 'src/app/shared/validators';
 export class SettingsComponent {
   private _image: File | null = null;
 
-  public usernameForm: FormGroup;
-  public emailForm: FormGroup;
-  public passwordForm: FormGroup;
+  usernameForm: FormGroup;
+  emailForm: FormGroup;
+  passwordForm: FormGroup;
 
-  public currentUser$ = this.auth.currentUser$;
-  public imagePreview: string | ArrayBuffer | null = null;
+  currentUser$ = this.auth.currentUser$;
+  imagePreview: string | ArrayBuffer | null = null;
+  errorMessage: string | null = null;
 
   public get isInPreview() {
     return this._image !== null;
@@ -64,8 +65,11 @@ export class SettingsComponent {
     const { username } = this.usernameForm.value;
 
     this.auth.changeUsername$(username).subscribe({
-      complete: () => {
+      next: () => {
         this.resetFormGroup(this.usernameForm);
+      },
+      error: (err) => {
+        this.errorMessage = err.message;
       },
     });
   }
@@ -77,6 +81,9 @@ export class SettingsComponent {
       next: () => {
         this.resetFormGroup(this.emailForm);
       },
+      error: (err) => {
+        this.errorMessage = err.message;
+      },
     });
   }
 
@@ -86,6 +93,9 @@ export class SettingsComponent {
     this.auth.changePassword$(password).subscribe({
       next: () => {
         this.resetFormGroup(this.passwordForm);
+      },
+      error: (err) => {
+        this.errorMessage = err.message;
       },
     });
   }
@@ -103,7 +113,7 @@ export class SettingsComponent {
       file === null ||
       !/.+\.(png|jpg|jpeg)/.test(file.name.toLocaleLowerCase())
     ) {
-      console.error('Invalid image!');
+      this.errorMessage = 'Invalid image.';
       return;
     }
 

@@ -8,8 +8,8 @@ import { AuthService } from 'src/app/core/services/auth.service';
   styleUrls: ['./user-control.component.css'],
 })
 export class UserControlComponent {
-  public isLogged$ = this.auth.isLogged$;
-  public currentUser$ = this.auth.currentUser$;
+  isLogged$ = this.auth.isLogged$;
+  currentUser$ = this.auth.currentUser$;
 
   constructor(private auth: AuthService, private router: Router) {}
 

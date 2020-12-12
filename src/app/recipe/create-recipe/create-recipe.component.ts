@@ -15,6 +15,9 @@ export class CreateRecipeComponent {
   imageName: string = 'Choose file...';
   imagePreview: ArrayBuffer | string | null = null;
 
+  errorMessage: string | null = null;
+  isLoading = false;
+
   get nameControl() {
     return this.form.get('name');
   }
@@ -80,14 +83,16 @@ export class CreateRecipeComponent {
 
     const { name, shortDesc, difficulty, products, steps } = this.form.value;
 
+    this.isLoading = true;
     this.recipeService
       .addRecipe$(name, this._imageFile, shortDesc, difficulty, products, steps)
       .subscribe({
         next: () => {
           this.router.navigate(['/home']);
         },
-        error: () => {
-          console.error();
+        error: (err) => {
+          this.isLoading = false;
+          this.errorMessage = err.message;
         },
       });
   }

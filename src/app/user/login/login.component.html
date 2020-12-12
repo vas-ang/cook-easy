@@ -1,5 +1,7 @@
 <h2>Login</h2>
-
+<div *ngIf="hasError" class="alert alert-danger" role="alert">
+  Invalid username/password!
+</div>
 <form [formGroup]="form" (ngSubmit)="submitHandler()">
   <div class="form-group">
     <label for="email">Email</label>

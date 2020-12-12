@@ -11,6 +11,7 @@ import { AuthService } from 'src/app/core/services/auth.service';
 export class LoginComponent {
   form: FormGroup;
   isLoading = false;
+  hasError = false;
 
   get emailInput() {
     return this.form.get('email');
@@ -27,7 +28,7 @@ export class LoginComponent {
   ) {
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.maxLength(6)]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
     });
   }
 
@@ -40,7 +41,8 @@ export class LoginComponent {
         this.router.navigate(['/home']);
       },
       error: (err) => {
-        console.error(err);
+        this.isLoading = false;
+        this.hasError = true;
       },
     });
   }

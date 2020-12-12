@@ -1,5 +1,7 @@
 <h2 class="mb-5">User Settings</h2>
-
+<div *ngIf="errorMessage !== null" class="alert alert-danger" role="alert">
+  {{ errorMessage }}
+</div>
 <div class="container">
   <div class="d-flex align-items-center row mb-5">
     <img
@@ -54,7 +56,13 @@
           name="username"
         />
         <div *ngIf="usernameForm.touched">
-          <button type="submit" class="btn btn-success ml-5">Submit</button>
+          <button
+            [disabled]="usernameForm.touched && usernameForm.invalid"
+            type="submit"
+            class="btn btn-success ml-5"
+          >
+            Submit
+          </button>
           <button
             type="reset"
             class="btn btn-danger ml-2"
@@ -93,8 +101,16 @@
           name="email"
         />
         <div *ngIf="emailForm.touched">
-          <button class="btn btn-success ml-5">Submit</button>
-          <button class="btn btn-danger ml-2" (click)="resetFormGroup(emailForm)">
+          <button
+            [disabled]="emailForm.touched && emailForm.invalid"
+            class="btn btn-success ml-5"
+          >
+            Submit
+          </button>
+          <button
+            class="btn btn-danger ml-2"
+            (click)="resetFormGroup(emailForm)"
+          >
             Cancel
           </button>
         </div>
@@ -144,8 +160,16 @@
           />
         </div>
         <div *ngIf="passwordForm.touched">
-          <button class="btn btn-success ml-5">Submit</button>
-          <button class="btn btn-danger ml-2" (click)="resetFormGroup(passwordForm)">
+          <button
+            [disabled]="passwordForm.touched && passwordForm.invalid"
+            class="btn btn-success ml-5"
+          >
+            Submit
+          </button>
+          <button
+            class="btn btn-danger ml-2"
+            (click)="resetFormGroup(passwordForm)"
+          >
             Cancel
           </button>
         </div>
