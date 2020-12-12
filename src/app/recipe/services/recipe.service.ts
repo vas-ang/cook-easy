@@ -13,6 +13,12 @@ import { FileUploadService } from 'src/app/shared/services/file-upload.service';
 
 @Injectable()
 export class RecipeService {
+  private _paginationData = new BehaviorSubject<{
+    recipe?: IRecipe;
+    action: string;
+  }>({
+    action: 'forward',
+  });
   private _difficultyFilter = new BehaviorSubject<string | null>(null);
   private _nameFilter = new BehaviorSubject<string | null>(null);
   private _recipeCollection: AngularFirestoreCollection<IRecipe>;
@@ -29,22 +35,43 @@ export class RecipeService {
       switchMap((name) => {
         return this._difficultyFilter.pipe(
           switchMap((difficulty) => {
-            return this.firestore
-              .collection<IRecipe>('recipes', (ref) => {
-                let query:
-                  | firebase.default.firestore.CollectionReference
-                  | firebase.default.firestore.Query = ref;
+            return this._paginationData.pipe(
+              switchMap((data) => {
+                return this.firestore
+                  .collection<IRecipe>('recipes', (ref) => {
+                    let query:
+                      | firebase.default.firestore.CollectionReference
+                      | firebase.default.firestore.Query = ref;
 
-                if (name !== null && name !== '') {
-                  query = query.where('name', '==', name);
-                }
-                if (difficulty !== null && difficulty !== 'all') {
-                  query = query.where('difficulty', '==', difficulty);
-                }
+                    if (name === null) {
+                      query = query.orderBy('name');
+                    }
 
-                return query;
+                    if (name !== null && name !== '') {
+                      query = query.where('name', '==', name);
+                    }
+                    if (difficulty !== null && difficulty !== 'all') {
+                      query = query.where('difficulty', '==', difficulty);
+                    }
+                    if (data.recipe !== undefined) {
+                      query =
+                        data.action === 'forward'
+                          ? query.startAfter(data.recipe.name)
+                          : query.endBefore(data.recipe.name);
+                    }
+
+                    query =
+                      data.action === 'forward'
+                        ? query.limit(6)
+                        : query.limitToLast(6);
+
+                    return query;
+                  })
+                  .valueChanges({
+                    idField: 'recipeId',
+                  });
               })
-              .valueChanges();
+            );
           })
         );
       })
@@ -57,6 +84,10 @@ export class RecipeService {
 
   updateNameFilter(name: string | null) {
     this._nameFilter.next(name);
+  }
+
+  updatePaginationData(data: { recipe?: IRecipe; action: string }) {
+    this._paginationData.next(data);
   }
 
   getQueryResults$(query: string | null) {

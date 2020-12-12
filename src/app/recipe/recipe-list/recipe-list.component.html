@@ -45,11 +45,11 @@
     <option value="hard">Hard</option>
   </select>
 </div>
-<div class="row">
+<div *ngIf="recipes$ | async; let recipes" class="row">
   <div class="container col-10">
     <div class="row">
       <div
-        *ngFor="let recipe of recipes$ | async"
+        *ngFor="let recipe of recipes"
         class="card-link"
         class="card mr-3 mb-3"
       >
@@ -68,6 +68,28 @@
           >
         </div>
       </div>
+      <div *ngIf="recipes.length === 0">
+        <p>It looks like we ran out of recipes :(</p>
+        <button class="btn btn-primary" (click)="navigateToStart()">
+          Back to the beggining.
+        </button>
+      </div>
     </div>
+  </div>
+  <div class="col-12 d-flex justify-content-around">
+    <button
+      [disabled]="isFirstPage"
+      class="btn btn-secondary"
+      (click)="previousPageHandler(recipes[0])"
+    >
+      Previous page
+    </button>
+    <button
+      [disabled]="recipes.length < 6"
+      class="btn btn-secondary"
+      (click)="nextPageHandler(recipes[recipes.length - 1])"
+    >
+      Next page
+    </button>
   </div>
 </div>
