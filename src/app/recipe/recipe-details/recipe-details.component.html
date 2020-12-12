@@ -1,11 +1,4 @@
-<ng-template #loading>
-  <p>Loading...</p>
-</ng-template>
-
-<div
-  class="container"
-  *ngIf="recipeInfo$ | async; let recipeInfo; else: loading"
->
+<div class="container" *ngIf="recipeInfo$ | async; let recipeInfo">
   <h2 class="row ml-1">
     {{ recipeInfo.recipe?.name }}
   </h2>

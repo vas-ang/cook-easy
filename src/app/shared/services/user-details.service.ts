@@ -20,10 +20,6 @@ export class UserDetailsService {
   }
 
   getUserDetails$(userId: string | undefined) {
-    if (userId === undefined) {
-      throw new Error('userId is undefined!');
-    }
-
     return this._usersCollection.doc(userId).valueChanges();
   }
 }

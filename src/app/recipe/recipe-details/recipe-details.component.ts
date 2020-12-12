@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { EMPTY, Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { IRecipe } from 'src/app/shared/interfaces/IRecipe';
@@ -19,20 +19,25 @@ export class RecipeDetailsComponent implements OnInit {
   }> = EMPTY;
 
   constructor(
-    private route: ActivatedRoute,
+    private router: Router,
+    private currentRoute: ActivatedRoute,
     private recipeService: RecipeService,
     private userDetailsService: UserDetailsService
   ) {}
 
   ngOnInit(): void {
     this.recipeInfo$ = this.recipeService
-      .getRecipe$(this.route.snapshot.params['id'])
+      .getRecipe$(this.currentRoute.snapshot.params['id'])
       .pipe(
         switchMap((recipe) => {
           return this.userDetailsService
             .getUserDetails$(recipe?.creatorId)
             .pipe(
               map((user) => {
+                if (user === undefined) {
+                  this.router.navigate(['/home']);
+                }
+
                 return { recipe, user };
               })
             );
