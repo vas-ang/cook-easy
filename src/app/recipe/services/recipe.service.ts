@@ -146,4 +146,8 @@ export class RecipeService {
   getRecipe$(recipeId: string) {
     return this._recipeCollection.doc(recipeId).valueChanges();
   }
+
+  deleteRecipe$(recipeId: string) {
+    return from(this._recipeCollection.doc(recipeId).delete());
+  }
 }

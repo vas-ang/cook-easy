@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EMPTY, Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
+import { AuthService } from 'src/app/core/services/auth.service';
 import { IRecipe } from 'src/app/shared/interfaces/IRecipe';
 import { IUserInfo } from 'src/app/shared/interfaces/IUserInfo';
 import { UserDetailsService } from 'src/app/shared/services/user-details.service';
@@ -18,12 +19,27 @@ export class RecipeDetailsComponent implements OnInit {
     user: IUserInfo | undefined;
   }> = EMPTY;
 
+  get currentUser$() {
+    return this.authService.currentUser$;
+  }
+
   constructor(
     private router: Router,
+    private authService: AuthService,
     private currentRoute: ActivatedRoute,
     private recipeService: RecipeService,
     private userDetailsService: UserDetailsService
   ) {}
+
+  deleteClickHandler() {
+    this.recipeService
+      .deleteRecipe$(this.currentRoute.snapshot.params['id'])
+      .subscribe({
+        next: () => {
+          this.router.navigate(['/home']);
+        },
+      });
+  }
 
   ngOnInit(): void {
     this.recipeInfo$ = this.recipeService

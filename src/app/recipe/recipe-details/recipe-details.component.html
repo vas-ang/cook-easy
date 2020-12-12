@@ -2,7 +2,16 @@
   <h2 class="row ml-1">
     {{ recipeInfo.recipe?.name }}
   </h2>
-  <h4 class="row ml-1">{{ recipeInfo.recipe?.difficulty }} difficulty</h4>
+  <h4 class="ml-1">{{ recipeInfo.recipe?.difficulty }} difficulty</h4>
+  <div *ngIf="currentUser$ | async; let user">
+    <button
+      *ngIf="recipeInfo.recipe!.creatorId === user!.uid"
+      (click)="deleteClickHandler()"
+      class="btn btn-danger"
+    >
+      Delete
+    </button>
+  </div>
   <div class="row ml-1 d-flex align-items-end mb-3">
     <p class="mr-3 mb-0">Submitted by:</p>
     <img
